@@ -102,7 +102,7 @@ def handle_puzzle_solved(puzzle_id, answer_text):
         return
     try:
         puzzle.chat_room.archive_channels()
-        party_count -= 1
+        #party_count -= 1
         msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
         #requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
@@ -118,8 +118,8 @@ def handle_puzzle_unsolved(puzzle_id):
     try:
         puzzle.chat_room.unarchive_channels()
         puzzle.chat_room.create_channels()
-        party_count += 1
-        msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
+        #party_count += 1
+        msg = f"**{puzzle.name}** is no longer solved!" #We are now Donner, party of {party_count}...
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
         #requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
     except Exception as e:
