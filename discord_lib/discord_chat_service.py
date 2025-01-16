@@ -60,6 +60,20 @@ class DiscordChatService(ChatService):
             )
         except Exception as e:
             print(f"Error sending discord message: {e}")
+            
+    def rename_channel(self, channel_id, name):
+        """
+        Renames specified channel_id to name.
+        """
+        try:
+            requests.patch(
+                f"{DISCORD_BASE_API_URL}/channels/{channel_id}/",
+                headers=self._headers,
+                json={"name": name},
+                timeout=5,
+            )
+        except Exception as e:
+            print(f"Error sending discord message: {e}")
 
     def announce(self, puzzle_announcements_id, msg, embedded_urls={}):
         if puzzle_announcements_id:
