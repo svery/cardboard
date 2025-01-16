@@ -4,12 +4,12 @@ from django.utils.translation import gettext_lazy as _
 
 
 class PuzzleTagColor(models.TextChoices):
-    BLUE = "primary", _("blue")
+    BLUE = "primary", _("blue") # reserved for tags we have discord roles for
     GRAY = "secondary", _("gray")
     GREEN = "success", _("green")  # reserved for backsolved and freebie
     RED = "danger", _("red")  # reserved for high pri
     YELLOW = "warning", _("yellow")  # reserved for low pri
-    WHITE = "light", _("white")
+    WHITE = "light", _("white") # general
     BLACK = "dark", _("black")  # reserved for meta tags
     TEAL = "info", _("teal")  # reserved for location tags
 
@@ -34,38 +34,48 @@ class PuzzleTag(models.Model):
         (BACKSOLVED, PuzzleTagColor.GREEN),
         (FREEBIE, PuzzleTagColor.GREEN),
         ("Slog", PuzzleTagColor.GRAY),
-        ("Grunt work", PuzzleTagColor.GRAY),
+        # Discord roles
+		("Coding", PuzzleTagColor.BLUE),
+		("Crossword", PuzzleTagColor.BLUE),
+		("Extraction", PuzzleTagColor.BLUE),
+		("Geography", PuzzleTagColor.BLUE),
+		("Google Fu", PuzzleTagColor.BLUE),
+		("Logic puzzle", PuzzleTagColor.BLUE),
+		("Metas", PuzzleTagColor.BLUE),
+		("MIT Knowledge", PuzzleTagColor.BLUE),
+		("Music", PuzzleTagColor.BLUE),
+		("Pop Culture", PuzzleTagColor.BLUE),
+		("Grunt work", PuzzleTagColor.BLUE),
+		("On Campus", PuzzleTagColor.BLUE),
+		("Interaction/Scavenger Hunt", PuzzleTagColor.BLUE),
         # Logic puzzles
         ("Grid logic", PuzzleTagColor.WHITE),
         ("Non-grid logic", PuzzleTagColor.WHITE),
         # Word puzzles
-        ("Crossword", PuzzleTagColor.BLUE),
-        ("Cryptics", PuzzleTagColor.BLUE),
-        ("Letter soup", PuzzleTagColor.BLUE),
-        ("Phonetic", PuzzleTagColor.BLUE),
+        ("Cryptics", PuzzleTagColor.WHITE),
+        ("Letter soup", PuzzleTagColor.WHITE),
+        ("Phonetic", PuzzleTagColor.WHITE),
         # ID
         ("Art ID", PuzzleTagColor.WHITE),
         ("Image ID", PuzzleTagColor.WHITE),
         ("Music ID", PuzzleTagColor.WHITE),
         ("Other ID tasks", PuzzleTagColor.WHITE),
         # Specific puzzle types
-        ("Black box", PuzzleTagColor.BLUE),
-        ("Interactive", PuzzleTagColor.BLUE),
-        ("Minipuzzles", PuzzleTagColor.BLUE),
-        ("Meta Matching", PuzzleTagColor.BLUE),
+        ("Black box", PuzzleTagColor.WHITE),
+        ("Interactive", PuzzleTagColor.WHITE),
+        ("Minipuzzles", PuzzleTagColor.WHITE),
+        ("Meta Matching", PuzzleTagColor.WHITE),
         # Stuff my mom calls IT
-        ("Code 🐒", PuzzleTagColor.WHITE),
         ("Digital forensics", PuzzleTagColor.WHITE),
         ("Media manipulation", PuzzleTagColor.WHITE),
         # Academic topics
-        ("Bio", PuzzleTagColor.BLUE),
-        ("Chem", PuzzleTagColor.BLUE),
-        ("Foreign languages", PuzzleTagColor.BLUE),
-        ("History/Politics/Law", PuzzleTagColor.BLUE),
-        ("Literature", PuzzleTagColor.BLUE),
-        ("Maps/Geography", PuzzleTagColor.BLUE),
-        ("Math", PuzzleTagColor.BLUE),
-        ("Physics", PuzzleTagColor.BLUE),
+        ("Bio", PuzzleTagColor.WHITE),
+        ("Chem", PuzzleTagColor.WHITE),
+        ("Foreign languages", PuzzleTagColor.WHITE),
+        ("History/Politics/Law", PuzzleTagColor.WHITE),
+        ("Literature", PuzzleTagColor.WHITE),
+        ("Math", PuzzleTagColor.WHITE),
+        ("Physics", PuzzleTagColor.WHITE),
         # Interests/hobbies
         ("Anime", PuzzleTagColor.WHITE),
         ("Board games", PuzzleTagColor.WHITE),
@@ -76,14 +86,8 @@ class PuzzleTag(models.Model):
         ("TV", PuzzleTagColor.WHITE),
         ("Video games", PuzzleTagColor.WHITE),
         # In-person
-        ("MIT knowledge", PuzzleTagColor.BLUE),
-        ("Scavenger hunt/submission", PuzzleTagColor.BLUE),
-        ("Physical puzzle", PuzzleTagColor.BLUE),
-        ("Live interaction", PuzzleTagColor.BLUE),
-        ("Jigsaw", PuzzleTagColor.BLUE),
-        # Locations
-        ("On campus", LOCATION_COLOR),
-        ("Remote", LOCATION_COLOR),
+        ("Physical puzzle", PuzzleTagColor.WHITE),
+        ("Jigsaw", PuzzleTagColor.WHITE),
     ]
 
     hunt = models.ForeignKey(
