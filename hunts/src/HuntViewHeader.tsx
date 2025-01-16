@@ -45,7 +45,7 @@ function HuntViewHeader({ hunt }: { hunt: Hunt }) {
         <Container fluid style={{ fontWeight: "bold" }}>
           <Row className="text-center small">
             <Col xs={1} className="text-nowrap px-0 mx-0">
-              Metas
+              Rounds
             </Col>
             <Col xs={1} className="text-nowrap px-0 mx-0">
               Puzzles
