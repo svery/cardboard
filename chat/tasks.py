@@ -88,14 +88,25 @@ def handle_puzzle_meta_change(puzzle_id):
 
 
 @shared_task(rate_limit="6/m", acks_late=True)
+
+party_count = 87 - hunt.get_num_solved()
+
+def party_count_channel():
+    if party_count >= 0:
+        return "party of {party_count}"
+    else: 
+        return "party of {abs(party_count)}"
+
 def handle_puzzle_solved(puzzle_id, answer_text):
     puzzle = _get_puzzles_queryset().get(id=puzzle_id)
     if not puzzle.chat_room:
         return
     try:
         puzzle.chat_room.archive_channels()
-        msg = f"**{puzzle.name}** has been solved with `{answer_text}`!"
+        party_count -= 1
+        msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
+        requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel()})
     except Exception as e:
         logger.exception(f"handle_puzzle_solved failed with error: {e}")
 
@@ -108,10 +119,13 @@ def handle_puzzle_unsolved(puzzle_id):
     try:
         puzzle.chat_room.unarchive_channels()
         puzzle.chat_room.create_channels()
-        msg = f"**{puzzle.name}** is no longer solved!"
+        party_count += 1
+        msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
+        requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel()})
     except Exception as e:
         logger.exception(f"handle_puzzle_unsolved failed with error: {e}")
+
 
 
 @shared_task(rate_limit="6/m", acks_late=True)
