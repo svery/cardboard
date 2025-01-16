@@ -139,7 +139,7 @@ $(document).ready(function() {
                 'render': function(data, type, row, meta) {
                     let result = '<a href="' + row[puzzle_url] + '" target="_blank">' + row[puzzle_name] + '</a>';
                     if (row[puzzle_is_meta]) {
-                        result += ' <span class="badge badge-dark badge-meta">META</span>';
+                        result += ' <span class="badge badge-dark badge-meta">ROUND</span>';
                     }
                     return result;
                 },
