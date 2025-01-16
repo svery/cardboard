@@ -128,7 +128,7 @@ def handle_puzzle_unsolved(puzzle_id):
         chat_service = settings.CHAT_SERVICES[settings.CHAT_DEFAULT_SERVICE].get_instance()
         msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch("https://discord.com/api/channels/790793061860114442", headers=chat_service._headers, json={"name": "party of " + party_count_channel(party_count)})
+        requests.patch("https://discord.com/api/channels/790793061860114442", headers=chat_service._headers, json={"name": party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_unsolved failed with error: {e}")
 
