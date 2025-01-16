@@ -12,6 +12,7 @@ from puzzles.models import Puzzle
 from puzzles.puzzle_tag import PuzzleTag, PuzzleTagColor
 
 logger = logging.getLogger(__name__)
+party_count = 87
 
 
 def _get_puzzles_queryset(include_deleted=False):
@@ -88,10 +89,6 @@ def handle_puzzle_meta_change(puzzle_id):
 
 
 @shared_task(rate_limit="6/m", acks_late=True)
-
-
-
-party_count = 87 
 
 def party_count_channel(party_count):
     #hunt = Hunt.get_object_or_404()
