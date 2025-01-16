@@ -92,12 +92,12 @@ def handle_puzzle_meta_change(puzzle_id):
 
 
 def party_count_channel():
-    hunt = Hunt.get_object_or_404(slug=hunt_slug)
+    hunt = Hunt.get_object_or_404()
     party_count = 87 - hunt.get_num_solved()
     if party_count >= 0:
         return "party of {party_count}"
     else: 
-        return "party of {abs(party_count)}"
+        return "party of minus {abs(party_count)}"
 
 def handle_puzzle_solved(puzzle_id, answer_text):
     puzzle = _get_puzzles_queryset().get(id=puzzle_id)
