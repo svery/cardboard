@@ -89,9 +89,11 @@ def handle_puzzle_meta_change(puzzle_id):
 
 @shared_task(rate_limit="6/m", acks_late=True)
 
-party_count = 87 - hunt.get_num_solved()
+
 
 def party_count_channel():
+    hunt = Hunt.get_object_or_404(slug=hunt_slug)
+    party_count = 87 - hunt.get_num_solved()
     if party_count >= 0:
         return "party of {party_count}"
     else: 
