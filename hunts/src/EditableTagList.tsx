@@ -36,8 +36,8 @@ function EditableTagList({
       result.push([item]);
     } else if (!selectable_colors.includes(item.color)) {
       result[result.length - 1].push(item);
-    #} else if (result[result.length - 1][0].color == item.color) {
-    #  result[result.length - 1].push(item);
+    /*} else if (result[result.length - 1][0].color == item.color) {*/
+    /*  result[result.length - 1].push(item);*/
     } else {
       result.push([item]);
     }
