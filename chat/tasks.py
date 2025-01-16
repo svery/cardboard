@@ -91,9 +91,11 @@ def handle_puzzle_meta_change(puzzle_id):
 
 
 
-def party_count_channel():
-    hunt = Hunt.get_object_or_404()
-    party_count = 87 - hunt.get_num_solved()
+party_count = 87 
+
+def party_count_channel(party_count):
+    #hunt = Hunt.get_object_or_404()
+    #party_count = 87 - hunt.get_num_solved()
     if party_count >= 0:
         return "party of {party_count}"
     else: 
