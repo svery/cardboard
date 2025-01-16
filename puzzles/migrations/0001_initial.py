@@ -55,7 +55,7 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name="Round",
+            name="Metapuzzle",
             fields=[
                 (
                     "puzzle_ptr",
