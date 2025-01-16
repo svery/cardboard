@@ -13,8 +13,7 @@ from puzzles.models import Puzzle
 from puzzles.puzzle_tag import PuzzleTag, PuzzleTagColor
 
 logger = logging.getLogger(__name__)
-hunt = Hunt.get_object_or_404()
-party_count = 87 - hunt.get_num_solved()
+
 
 
 
@@ -99,13 +98,13 @@ def party_count_channel(num):
 
 @shared_task(rate_limit="6/m", acks_late=True)
 def handle_puzzle_solved(puzzle_id, answer_text):
-    global party_count
     puzzle = _get_puzzles_queryset().get(id=puzzle_id)
     if not puzzle.chat_room:
         return
     try:
         puzzle.chat_room.archive_channels()
-        party_count -= 1
+        hunt = Hunt.get_object_or_404()
+        party_count = 87 - hunt.get_num_solved()
         chat_service = settings.CHAT_SERVICES[settings.CHAT_DEFAULT_SERVICE].get_instance()
         msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
@@ -123,7 +122,8 @@ def handle_puzzle_unsolved(puzzle_id):
     try:
         puzzle.chat_room.unarchive_channels()
         puzzle.chat_room.create_channels()
-        party_count += 1
+        hunt = Hunt.get_object_or_404()
+        party_count = 87 - hunt.get_num_solved()
         chat_service = settings.CHAT_SERVICES[settings.CHAT_DEFAULT_SERVICE].get_instance()
         msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
