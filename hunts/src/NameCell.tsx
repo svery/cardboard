@@ -144,7 +144,7 @@ export default function NameCell({
         )}{" "}
         {row.values.is_meta ? (
           <>
-            <Badge bg="dark" text="white">META</Badge>{" "}
+            <Badge bg="dark" text="white">ROUND</Badge>{" "}
           </>
         ) : null}
         <div
