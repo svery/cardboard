@@ -45,6 +45,7 @@ function EditPuzzleTagsModal({
         />
         <br />
         <h5 style={{ textAlign: "center" }}>Tags</h5>
+        <h6 style={{ textAlign: "left" }}>Blue tags ping the corresponding Discord roles.</h6>
         <EditableTagList
           puzzleId={puzzleId}
           tags={allTags.filter((tag) => !tag.is_meta && !tag.is_location)}
