@@ -14,7 +14,7 @@ from puzzles.puzzle_tag import PuzzleTag, PuzzleTagColor
 
 logger = logging.getLogger(__name__)
 hunt = Hunt.get_object_or_404()
-party_count = 87 - hunt.num_solved()
+party_count = 87 - hunt.get_num_solved()
 
 
 
