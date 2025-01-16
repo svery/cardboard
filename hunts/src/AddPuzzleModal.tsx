@@ -66,7 +66,7 @@ function AddPuzzleModal({ huntId }: { huntId: HuntId }) {
             />
           </Form.Group>
           <Form.Group controlId="addPuzzle.meta">
-            <Form.Label>Assigned Meta</Form.Label>
+            <Form.Label>Assigned Round</Form.Label>
             <Form.Control
               as="select"
               value={assignedMeta}
