@@ -1,4 +1,4 @@
-import logging
+import logging, requests
 from datetime import datetime, timedelta
 
 from celery import shared_task
@@ -12,6 +12,8 @@ from puzzles.models import Puzzle
 from puzzles.puzzle_tag import PuzzleTag, PuzzleTagColor
 
 logger = logging.getLogger(__name__)
+party_count = 87
+
 
 
 def _get_puzzles_queryset(include_deleted=False):
@@ -87,6 +89,12 @@ def handle_puzzle_meta_change(puzzle_id):
         logger.exception(f"handle_puzzle_meta_change failed with error: {e}")
 
 
+def party_count_channel(num):
+    if num >= 0:
+        return str(num)
+    else: 
+        return "minus " + str(abs(num))
+
 @shared_task(rate_limit="6/m", acks_late=True)
 def handle_puzzle_solved(puzzle_id, answer_text):
     puzzle = _get_puzzles_queryset().get(id=puzzle_id)
@@ -94,8 +102,10 @@ def handle_puzzle_solved(puzzle_id, answer_text):
         return
     try:
         puzzle.chat_room.archive_channels()
-        msg = f"**{puzzle.name}** has been solved with `{answer_text}`!"
+        party_count -= 1
+        msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
+        #requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_solved failed with error: {e}")
 
@@ -108,8 +118,10 @@ def handle_puzzle_unsolved(puzzle_id):
     try:
         puzzle.chat_room.unarchive_channels()
         puzzle.chat_room.create_channels()
-        msg = f"**{puzzle.name}** is no longer solved!"
+        party_count += 1
+        msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
+        #requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_unsolved failed with error: {e}")
 
