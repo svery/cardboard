@@ -31,7 +31,7 @@ function EditableTagList({
   /* Assumes that tags are given in the order they should be displayed and */
   /* breaks them up into rows, with the first row being of the non-selectable colors */
   /* and subsequent rows alternating between the selectable colors */
-  const groupedTags = tags.reduce((result: PuzzleTag[][].sort((a, b) => a.color.localeCompare(b.color)), item) => {
+  const groupedTags = tags.sort((a, b) => a.color.localeCompare(b.color)).reduce((result: PuzzleTag[][], item) => {
     if (result.length == 0) {
       result.push([item]);
     } else if (!selectable_colors.includes(item.color)) {
