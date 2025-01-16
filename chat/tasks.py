@@ -13,7 +13,8 @@ from puzzles.models import Puzzle
 from puzzles.puzzle_tag import PuzzleTag, PuzzleTagColor
 
 logger = logging.getLogger(__name__)
-party_count = 87
+hunt = Hunt.get_object_or_404()
+party_count = 87 - hunt.num_solved()
 
 
 
