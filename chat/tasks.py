@@ -1,4 +1,4 @@
-import logging, requests
+import logging
 from datetime import datetime, timedelta
 
 from celery import shared_task
@@ -12,7 +12,6 @@ from puzzles.models import Puzzle
 from puzzles.puzzle_tag import PuzzleTag, PuzzleTagColor
 
 logger = logging.getLogger(__name__)
-party_count = 87
 
 
 def _get_puzzles_queryset(include_deleted=False):
@@ -89,25 +88,14 @@ def handle_puzzle_meta_change(puzzle_id):
 
 
 @shared_task(rate_limit="6/m", acks_late=True)
-
-def party_count_channel(num):
-    #hunt = Hunt.get_object_or_404()
-    #num = 87 - hunt.get_num_solved()
-    if num >= 0:
-        return f"party of {num}"
-    else: 
-        return f"party of minus {abs(num)}"
-
 def handle_puzzle_solved(puzzle_id, answer_text):
     puzzle = _get_puzzles_queryset().get(id=puzzle_id)
     if not puzzle.chat_room:
         return
     try:
         puzzle.chat_room.archive_channels()
-        party_count -= 1
-        msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
+        msg = f"**{puzzle.name}** has been solved with `{answer_text}`!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        #requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_solved failed with error: {e}")
 
@@ -120,13 +108,10 @@ def handle_puzzle_unsolved(puzzle_id):
     try:
         puzzle.chat_room.unarchive_channels()
         puzzle.chat_room.create_channels()
-        party_count += 1
-        msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
+        msg = f"**{puzzle.name}** is no longer solved!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        #requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_unsolved failed with error: {e}")
-
 
 
 @shared_task(rate_limit="6/m", acks_late=True)
