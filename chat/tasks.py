@@ -1,4 +1,4 @@
-import logging
+import logging, requests
 from datetime import datetime, timedelta
 
 from celery import shared_task
@@ -90,13 +90,13 @@ def handle_puzzle_meta_change(puzzle_id):
 
 @shared_task(rate_limit="6/m", acks_late=True)
 
-def party_count_channel(party_count):
+def party_count_channel(num):
     #hunt = Hunt.get_object_or_404()
-    #party_count = 87 - hunt.get_num_solved()
-    if party_count >= 0:
-        return "party of {party_count}"
+    #num = 87 - hunt.get_num_solved()
+    if num >= 0:
+        return f"party of {num}"
     else: 
-        return "party of minus {abs(party_count)}"
+        return f"party of minus {abs(num)}"
 
 def handle_puzzle_solved(puzzle_id, answer_text):
     puzzle = _get_puzzles_queryset().get(id=puzzle_id)
@@ -107,7 +107,7 @@ def handle_puzzle_solved(puzzle_id, answer_text):
         party_count -= 1
         msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel()})
+        requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_solved failed with error: {e}")
 
@@ -123,7 +123,7 @@ def handle_puzzle_unsolved(puzzle_id):
         party_count += 1
         msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel()})
+        requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_unsolved failed with error: {e}")
 
