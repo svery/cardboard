@@ -106,7 +106,7 @@ def handle_puzzle_solved(puzzle_id, answer_text):
         party_count -= 1
         msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
+        requests.patch(f"https://discord.com/api/channels/790793061860114442/", json={"name": "party of " + party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_solved failed with error: {e}")
 
@@ -123,7 +123,7 @@ def handle_puzzle_unsolved(puzzle_id):
         party_count += 1
         msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch(f"{DISCORD_BASE_API_URL}/channels/790793061860114442/", json={"name": party_count_channel(party_count)})
+        requests.patch(f"https://discord.com/api/channels/790793061860114442/", json={"name": "party of " + party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_unsolved failed with error: {e}")
 
