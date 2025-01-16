@@ -4,6 +4,7 @@ from datetime import datetime, timedelta
 from celery import shared_task
 from django.db import transaction
 from django.db.models import Prefetch
+from django.conf import settings
 
 from answers.models import Answer
 from cardboard.settings import TaskPriority
@@ -104,9 +105,10 @@ def handle_puzzle_solved(puzzle_id, answer_text):
     try:
         puzzle.chat_room.archive_channels()
         party_count -= 1
+        chat_service = settings.CHAT_SERVICES[settings.CHAT_DEFAULT_SERVICE].get_instance()
         msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch(f"https://discord.com/api/channels/790793061860114442/", json={"name": "party of " + party_count_channel(party_count)})
+        requests.patch("https://discord.com/api/channels/790793061860114442/", headers=chat_services._headers, json={"name": "party of " + party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_solved failed with error: {e}")
 
@@ -123,7 +125,7 @@ def handle_puzzle_unsolved(puzzle_id):
         party_count += 1
         msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch(f"https://discord.com/api/channels/790793061860114442/", json={"name": "party of " + party_count_channel(party_count)})
+        requests.patch("https://discord.com/api/channels/790793061860114442/", json={"name": "party of " + party_count_channel(party_count)})
     except Exception as e:
         logger.exception(f"handle_puzzle_unsolved failed with error: {e}")
 
