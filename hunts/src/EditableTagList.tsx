@@ -28,18 +28,22 @@ function EditableTagList({
 
   const selectable_colors = SELECTABLE_TAG_COLORS.map((tag) => tag.color);
 
-  /* Assumes that tags are given in the order they should be displayed and */
-  /* breaks them up into rows, with the first row being of the non-selectable colors */
-  /* and subsequent rows alternating between the selectable colors */
+  /* Breaks up tags into two rows: ones with hardcoded colors and then the selectable colors.
+    In each row the tags are sorted by color and then by name. */
   const groupedTags = tags.sort((a, b) => a.color.localeCompare(b.color) || a.name.localeCompare(b.name)).reduce((result: PuzzleTag[][], item) => {
-    if (result.length == 0) {
+    if (selectable_colors.includes(item.color)) {
+      if (result.length == 0) {
+        result.push([]);
+      }
+      if (result.length == 1) {
+        result.push([item]);
+      } else {
+        result[1].push(item);
+      }
+    } else if (result.length == 0) {
       result.push([item]);
-    } else if (!selectable_colors.includes(item.color)) {
-      result[result.length - 1].push(item);
-    } else if (result[result.length - 1][0].color == item.color) {
-      result[result.length - 1].push(item);
     } else {
-      result.push([item]);
+      result[0].push(item);
     }
 
     return result;
