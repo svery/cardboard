@@ -30,13 +30,15 @@ async def on_ready():
     except Exception as e:
         print(f"Sync command failed with error: {e}")
 
-@bot.command()
-async def get_this_channel(ctx):
-    channel = ctx.channel
+@bot.command(description="Sends the bot's latency.") # this decorator makes a slash command
+async def ping(ctx): # a slash command will be created with the name "ping"
+    await ctx.respond(f"Pong! Latency is {bot.latency}")
 
-@bot.tree.command(name="solve", description="Mark the puzzle as solved.")
-@app_commands.describe(answer="Answer to the puzzle")
-async def solve_command(ctx: interactions.SlashContext, answer: str):
+puzzle_commands = bot.create_group("puzzle commands", "Commands related to puzzles.")
+
+@puzzle_commands.command(name="solve", description="Mark the puzzle as solved.")
+@puzzle_commands.describe(answer="Answer to the puzzle")
+async def solve(ctx: interactions.SlashContext, answer: str):
     channel_id = ctx.channel.id
     try:
         match = list(Puzzle.objects.filter(hunt=settings.BOT_ACTIVE_HUNT, chat_room.text_channel_id=channel_id))
@@ -55,4 +57,4 @@ async def solve_command(ctx: interactions.SlashContext, answer: str):
         logger.exception(f"announce_puzzle_unlock failed with error: {e}")
 
 # Run the bot with your token
-bot.run("settings.DISCORD_API_TOKEN")
+bot.run(settings.DISCORD_API_TOKEN)
