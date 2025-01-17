@@ -28,6 +28,7 @@ async def on_ready():
     try:
         await bot.tree.sync()
         print("Synced the commands.")
+
     except Exception as e:
         print(f"Sync command failed with error: {e}")
 
@@ -51,8 +52,8 @@ async def solve(interaction: discord.Interaction, answer: str):
             await interaction.response.send_message("This puzzle has already been solved.", ephemeral=True)
             return
         else:
-            sync_to_async(c.login)(username="discord_bot", password="testingpwd")
-            sync_to_async(c.post)(f"/api/v1/puzzles/{puzzle.id}/answers", {"text": answer})
+            await sync_to_async(c.login)(username="discord_bot", password="testingpwd")
+            await sync_to_async(c.post)(f"/api/v1/puzzles/{puzzle.id}/answers", {"text": answer})
             await interaction.response.send_message(f"Solved as `{answer}`!")
     except Exception as e:
         logger.exception(f"announce_puzzle_unlock failed with error: {e}")
