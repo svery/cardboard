@@ -9,6 +9,7 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.test import Client
+from guardian.shortcuts import assign_perm
 
 from accounts.models import Puzzler
 from puzzles.models import Puzzle
@@ -41,10 +42,10 @@ async def pingpuzzbot(interaction: discord.Interaction): # a slash command will 
 async def solve(interaction: discord.Interaction, answer: str):
     try:
         channel_id = interaction.channel.id
-        match = await sync_to_async(list)(Puzzle.objects.filter(discord_channel_id=channel_id))
+        matching_puzzles = await sync_to_async(list)(Puzzle.objects.filter(chat_room__text_channel_id=channel_id))
         allpuzzles = await sync_to_async(list)(Puzzle.objects.all())
         if not match:
-            await interaction.response.send_message(f"Puzzle {channel_id} not found. Hunt: {hunt}, Puzzles: {allpuzzles}, Channel IDs: {[puz.discord_channel_id for puz in allpuzzles]}  (Please use this command in the puzzle-specific channel.)", ephemeral=True)
+            await interaction.response.send_message(f"Puzzle {channel_id} not found. Hunt: {hunt}, Puzzles: {allpuzzles}, Channel IDs: {[puz.chat_room.text_channel_id for puz in allpuzzles]}  (Please use this command in the puzzle-specific channel.)", ephemeral=True)
             return
         puzzle = matching_puzzles[0]
         if puzzle.status == "SOLVED":
