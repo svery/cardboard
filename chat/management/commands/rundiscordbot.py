@@ -31,7 +31,7 @@ async def on_ready():
         print(f"Sync command failed with error: {e}")
 
 @bot.command(description="Sends the bot's latency.") # this decorator makes a slash command
-async def ping(ctx): # a slash command will be created with the name "ping"
+async def pingpuzzbot(ctx): # a slash command will be created with the name "ping"
     await ctx.respond(f"Pong! Latency is {bot.latency}")
 
 puzzle_commands = bot.create_group("puzzle commands", "Commands related to puzzles.")
