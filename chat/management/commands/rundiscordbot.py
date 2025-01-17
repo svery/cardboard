@@ -9,7 +9,6 @@ from django.conf import settings
 from django.core.management.base import BaseCommand
 from django.db.models import Q
 from django.test import Client
-from guardian.shortcuts import assign_perm
 
 from accounts.models import Puzzler
 from puzzles.models import Puzzle
@@ -52,8 +51,8 @@ async def solve(interaction: discord.Interaction, answer: str):
             await interaction.response.send_message("This puzzle has already been solved.", ephemeral=True)
             return
         else:
-            c.login(username="discord_bot", password="testingpwd")
-            c.post(f"/api/v1/puzzles/{puzzle.id}/answers", {"text": answer})
+            sync_to_async(c.login)(username="discord_bot", password="testingpwd")
+            sync_to_async(c.post)(f"/api/v1/puzzles/{puzzle.id}/answers", {"text": answer})
             await interaction.response.send_message(f"Solved as `{answer}`!")
     except Exception as e:
         logger.exception(f"announce_puzzle_unlock failed with error: {e}")
