@@ -38,7 +38,7 @@ async def pingpuzzbot(ctx): # a slash command will be created with the name "pin
 async def solve(interaction: discord.Interaction, answer: str):
     try:
         channel_id = interaction.channel.id
-        match = await sync_to_async(list)(Puzzle.objects.filter(hunt=hunt, chat_room.text_channel_id==channel_id))
+        match = await sync_to_async(list)(Puzzle.objects.filter(hunt=hunt, chat_room.text_channel_id=channel_id))
         if not match:
             await interaction.response.send_message("Puzzle not found. (Please use this command in the puzzle-specific channel.)", ephemeral=True)
             return
