@@ -44,10 +44,7 @@ async def solve(interaction: discord.Interaction, answer: str):
         match = await sync_to_async(list)(Puzzle.objects.filter(hunt=hunt, chat_room__text_channel_id=channel_id))
         allpuzzles = await sync_to_async(list)(Puzzle.objects.filter(hunt=hunt))
         if not match:
-            await interaction.response.send_message(f"Puzzle {channel_id} not found. \n
-            Puzzles: {allpuzzles}\n
-            Channels: {[puz.chat_room for puz in allpuzzles]} 
-            (Please use this command in the puzzle-specific channel.)", ephemeral=True)
+            await interaction.response.send_message(f"Puzzle {channel_id} not found. Puzzles: {allpuzzles} Channels: {[puz.chat_room for puz in allpuzzles]} (Please use this command in the puzzle-specific channel.)", ephemeral=True)
             return
         puzzle = matching_puzzles[0]
         if puzzle.status == "SOLVED":
