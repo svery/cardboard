@@ -21,7 +21,7 @@ c = Client()
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="/", intents=intents)
-hunt="mystery-hunt-2025"
+hunt=settings.BOT_ACTIVE_HUNT
 
 @bot.event
 async def on_ready():
@@ -42,9 +42,9 @@ async def solve(interaction: discord.Interaction, answer: str):
     try:
         channel_id = interaction.channel.id
         match = await sync_to_async(list)(Puzzle.objects.filter(discord_channel_id=channel_id))
-        allpuzzles = await sync_to_async(list)(Puzzle.objects.filter(hunt=hunt))
+        allpuzzles = await sync_to_async(list)(Puzzle.objects.all())
         if not match:
-            await interaction.response.send_message(f"Puzzle {channel_id} not found. Puzzles: {allpuzzles} Channels: {[puz.chat_room for puz in allpuzzles]} (Please use this command in the puzzle-specific channel.)", ephemeral=True)
+            await interaction.response.send_message(f"Puzzle {channel_id} not found. Hunt: {hunt}, Puzzles: {allpuzzles} Channels: {[puz.chat_room for puz in allpuzzles]} (Please use this command in the puzzle-specific channel.)", ephemeral=True)
             return
         puzzle = matching_puzzles[0]
         if puzzle.status == "SOLVED":
