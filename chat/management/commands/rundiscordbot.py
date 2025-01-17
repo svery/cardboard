@@ -28,13 +28,13 @@ async def on_ready():
     except Exception as e:
         print(f"Sync command failed with error: {e}")
 
-@bot.command(description="Sends the bot's latency.") # this decorator makes a slash command
+@bot.command(name="pingpuzzbot", description="Sends the bot's latency.") # this decorator makes a slash command
 async def pingpuzzbot(ctx): # a slash command will be created with the name "ping"
     await ctx.respond(f"Pong! Latency is {bot.latency}")
 
 
 @bot.command(name="solve", description="Mark the puzzle as solved.")
-@bot.describe(answer="Answer to the puzzle")
+@app_commands.describe(answer="Answer to the puzzle")
 async def solve(ctx: interactions.SlashContext, answer: str):
     channel_id = ctx.channel.id
     try:
