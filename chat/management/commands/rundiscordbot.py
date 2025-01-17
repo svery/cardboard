@@ -52,9 +52,7 @@ async def solve(interaction: discord.Interaction, answer: str):
             await interaction.response.send_message("This puzzle has already been solved.", ephemeral=True)
             return
         else:
-            temp_user = await sync_to_async(Puzzler.objects.create_user)(username="test", email="test@ing.com", password="testingpwd")
-            c.login(username="test", password="testingpwd")
-            assign_perm("hunt_access", self.temp_user, self.hunt)
+            c.login(username="discord_bot", password="testingpwd")
             c.post(f"/api/v1/puzzles/{puzzle.id}/answers", {"text": answer})
             await interaction.response.send_message(f"Solved as `{answer}`!")
     except Exception as e:
