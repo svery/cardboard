@@ -11,6 +11,7 @@ from django.test import Client
 
 from puzzles.models import Puzzle
 from puzzles.puzzle_tag import PuzzleTag
+logger = logging.getLogger(__name__)
 
 
 c = Client()
