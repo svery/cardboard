@@ -30,7 +30,7 @@ async def on_ready():
 
 @bot.tree.command(name="pingpuzzbot", description="Sends the bot's latency.") # this decorator makes a slash command
 async def pingpuzzbot(ctx): # a slash command will be created with the name "ping"
-    await ctx.respond(f"Pong! Latency is {bot.latency}")
+    await interaction.response.send_message(f"Pong! Latency is {bot.latency}")
 
 
 @bot.tree.command(name="solve", description="Mark the puzzle as solved.")
