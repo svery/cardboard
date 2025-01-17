@@ -29,7 +29,7 @@ async def on_ready():
         print(f"Sync command failed with error: {e}")
 
 @bot.tree.command(name="pingpuzzbot", description="Sends the bot's latency.") # this decorator makes a slash command
-async def pingpuzzbot(ctx): # a slash command will be created with the name "ping"
+async def pingpuzzbot(interaction: discord.Interaction): # a slash command will be created with the name "ping"
     await interaction.response.send_message(f"Pong! Latency is {bot.latency}")
 
 
