@@ -21,7 +21,7 @@ c = Client()
 intents = discord.Intents.default()
 intents.message_content = True
 bot = commands.Bot(command_prefix="/", intents=intents)
-hunt=settings.BOT_ACTIVE_HUNT
+hunt="mystery-hunt-2025"
 
 @bot.event
 async def on_ready():
@@ -41,8 +41,8 @@ async def pingpuzzbot(interaction: discord.Interaction): # a slash command will 
 async def solve(interaction: discord.Interaction, answer: str):
     try:
         channel_id = interaction.channel.id
-        match = await sync_to_async(list)(Puzzle.objects.filter(chat_room__text_channel_id=channel_id))
-        allpuzzles = await sync_to_async(list)(Puzzle.objects.filter(None))
+        match = await sync_to_async(list)(Puzzle.objects.filter(discord_channel_id=channel_id))
+        allpuzzles = await sync_to_async(list)(Puzzle.objects)
         if not match:
             await interaction.response.send_message(f"Puzzle {channel_id} not found. Puzzles: {allpuzzles} Channels: {[puz.chat_room for puz in allpuzzles]} (Please use this command in the puzzle-specific channel.)", ephemeral=True)
             return
