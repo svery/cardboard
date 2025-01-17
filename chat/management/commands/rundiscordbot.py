@@ -32,10 +32,9 @@ async def on_ready():
 async def pingpuzzbot(ctx): # a slash command will be created with the name "ping"
     await ctx.respond(f"Pong! Latency is {bot.latency}")
 
-puzzle_commands = bot.create_group("puzzle commands", "Commands related to puzzles.")
 
-@puzzle_commands.command(name="solve", description="Mark the puzzle as solved.")
-@puzzle_commands.describe(answer="Answer to the puzzle")
+@bot.command(name="solve", description="Mark the puzzle as solved.")
+@bot.describe(answer="Answer to the puzzle")
 async def solve(ctx: interactions.SlashContext, answer: str):
     channel_id = ctx.channel.id
     try:
