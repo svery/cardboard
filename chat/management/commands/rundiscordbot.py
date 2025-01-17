@@ -66,4 +66,12 @@ async def solve(interaction: discord.Interaction, answer: str):
             )
 
 # Run the bot with your token
-bot.run(settings.DISCORD_API_TOKEN)
+def main():
+    bot.run(settings.DISCORD_API_TOKEN)
+
+
+class Command(BaseCommand):
+    help = "Run the Discord bot."
+
+    def handle(self, *args, **options):
+        main()
