@@ -7,12 +7,9 @@ from discord import app_commands
 from asgiref.sync import sync_to_async
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from django.db.models import Q
 from django.test import Client
 
-from accounts.models import Puzzler
 from puzzles.models import Puzzle
-from puzzles.puzzle_tag import PuzzleTag
 logger = logging.getLogger(__name__)
 
 
