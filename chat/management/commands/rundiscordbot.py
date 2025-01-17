@@ -41,7 +41,7 @@ puzzle_commands = bot.create_group("puzzle commands", "Commands related to puzzl
 async def solve(ctx: interactions.SlashContext, answer: str):
     channel_id = ctx.channel.id
     try:
-        match = list(Puzzle.objects.filter(hunt=settings.BOT_ACTIVE_HUNT, chat_room.text_channel_id=channel_id))
+        match = list(Puzzle.objects.filter(hunt=settings.BOT_ACTIVE_HUNT, chat_room.text_channel_id==channel_id))
         if not match:
             await ctx.channel.send("Puzzle not found. (Please use this command in the puzzle-specific channel.)")
         elif match[0].status == "SOLVED":
