@@ -108,7 +108,7 @@ def handle_puzzle_solved(puzzle_id, answer_text):
         chat_service = settings.CHAT_SERVICES[settings.CHAT_DEFAULT_SERVICE].get_instance()
         msg = f"**{puzzle.name}** has been solved with `{answer_text}`! We are now Donner, party of {party_count}!"
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch("https://discord.com/api/channels/790793061860114442", headers=chat_service._headers, json={"name": party_count_channel(party_count)}, timeout=5)
+        requests.patch(f"https://discord.com/api/channels/{settings.DISCORD_PUZZLE_ANNOUNCEMENTS_CHANNEL}", headers=chat_service._headers, json={"name": party_count_channel(party_count)}, timeout=5)
         logger.exception(f"Renamed main channel to {party_count_channel(party_count)}")
     except Exception as e:
         logger.exception(f"handle_puzzle_solved failed with error: {e}")
@@ -128,7 +128,7 @@ def handle_puzzle_unsolved(puzzle_id):
         chat_service = settings.CHAT_SERVICES[settings.CHAT_DEFAULT_SERVICE].get_instance()
         msg = f"**{puzzle.name}** is no longer solved! We are now Donner, party of {party_count}..."
         puzzle.chat_room.send_and_announce_message_with_embedded_urls(msg, puzzle)
-        requests.patch("https://discord.com/api/channels/790793061860114442", headers=chat_service._headers, json={"name": party_count_channel(party_count)}, timeout=5)
+        requests.patch(f"https://discord.com/api/channels/{settings.DISCORD_PUZZLE_ANNOUNCEMENTS_CHANNEL}", headers=chat_service._headers, json={"name": party_count_channel(party_count)}, timeout=5)
     except Exception as e:
         logger.exception(f"handle_puzzle_unsolved failed with error: {e}")
 
