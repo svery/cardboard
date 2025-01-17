@@ -35,7 +35,7 @@ async def pingpuzzbot(ctx): # a slash command will be created with the name "pin
 
 @bot.command(name="solve", description="Mark the puzzle as solved.")
 @discord.app_commands.describe(answer="Answer to the puzzle")
-async def solve(ctx: discord.interactions.SlashContext, answer: str):
+async def solve(ctx: SlashContext, answer: str):
     channel_id = ctx.channel.id
     try:
         match = list(Puzzle.objects.filter(hunt==settings.BOT_ACTIVE_HUNT, chat_room.text_channel_id==channel_id))
