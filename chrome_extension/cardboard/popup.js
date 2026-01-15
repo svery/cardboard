@@ -558,3 +558,54 @@ function pollForCreatedPuzzlePeriodically(puzzle_url, interval, max_calls) {
   pollAndCheck();
   interval_id = setInterval(pollAndCheck, interval);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const urlInput  = document.getElementById("puzzle_url");
+  const nameInput = document.getElementById("puzzle_name");
+  if (!urlInput || !nameInput) return;
+
+  let nameTouched = false;
+  nameInput.addEventListener("input", () => {
+    nameTouched = nameInput.value.trim().length > 0;
+  });
+
+  function extractLastSegment(urlish) {
+    if (!urlish) return "";
+
+    let s = urlish.trim();
+
+    // Drop query string and hash
+    s = s.split("#")[0].split("?")[0];
+
+    // Remove trailing slashes
+    s = s.replace(/\/+$/, "");
+
+    const parts = s.split("/").filter(Boolean);
+    if (parts.length === 0) return "";
+
+    return parts[parts.length - 1];
+  }
+
+  function slugToTitle(slug) {
+    return slug
+      .replace(/[-_]+/g, " ")
+      .trim()
+      .replace(/\b\w/g, c => c.toUpperCase());
+  }
+
+  function autofill() {
+    if (nameTouched) return;
+
+    const slug = extractLastSegment(urlInput.value);
+    if (!slug) return;
+
+    // decode % etc safely
+    let decoded = slug;
+    try { decoded = decodeURIComponent(slug); } catch {}
+
+    nameInput.value = slugToTitle(decoded);
+  }
+
+  urlInput.addEventListener("change", autofill);
+
+});
