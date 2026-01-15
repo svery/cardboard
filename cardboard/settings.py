@@ -181,8 +181,8 @@ DATABASES["default"] = dj_database_url.config(conn_max_age=600, ssl_require=Fals
 DATABASES["default"]["TEST"] = {"NAME": "test_cardboard"}
 
 # App title
-APP_TITLE = os.environ.get("APP_TITLE", "Cardinality Cardboard")
-APP_SHORT_TITLE = os.environ.get("APP_SHORT_TITLE", "Cardboard")
+APP_TITLE = os.environ.get("APP_TITLE", "Donner Party A la Carte")
+APP_SHORT_TITLE = os.environ.get("APP_SHORT_TITLE", "A la Carte")
 FAVICON = "favicon.ico"
 if DEBUG:
     APP_TITLE = f"[Dev] {APP_TITLE}"
