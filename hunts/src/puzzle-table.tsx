@@ -131,15 +131,23 @@ function textFilterFn(rows: Row<Puzzle>[], _: string, filterValue: string) {
 
 textFilterFn.autoRemove = (val: any) => !val;
 
+type TagFilterValue = { tags: PuzzleTag[]; invert: boolean };
+
 function filterPuzzlesByTagFn(
   rows: Row<Puzzle>[],
   _: string,
-  tagList: PuzzleTag[]
+  filterValue: TagFilterValue
 ) {
+  const tagList = filterValue?.tags ?? [];
+  const invert = !!filterValue?.invert;
+
+  if (!tagList.length) return rows;
+
   return rows.filter((row) => {
-    return tagList.every((tag) =>
+    const hasAllTags = tagList.every((tag) =>
       row.original.tags.map((x) => x.id).includes(tag.id)
     );
+    return invert ? !hasAllTags : hasAllTags;
   });
 }
 
@@ -163,10 +171,12 @@ export const PuzzleTable = React.memo(
     data,
     filterSolved,
     filterTags,
+    invertTagFilter,
   }: {
     data: any;
     filterSolved: number;
     filterTags: PuzzleTag[];
+    invertTagFilter?: boolean;
   }) => {
     const filter = useSelector(getTextFilter);
 
@@ -240,8 +250,8 @@ export const PuzzleTable = React.memo(
     }, [filterSolved]);
 
     React.useEffect(() => {
-      setFilter("tags", filterTags);
-    }, [filterTags]);
+      setFilter("tags", { tags: filterTags, invert: !!invertTagFilter });
+    }, [filterTags, invertTagFilter]);
 
     let rowsList: React.ReactNode[] = [];
     const roundColors = [

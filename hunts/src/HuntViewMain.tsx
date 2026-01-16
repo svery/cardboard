@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button, Modal } from "react-bootstrap";
+import { Alert, Button, Modal, Form } from "react-bootstrap";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchPuzzles, selectPuzzleTableData } from "./puzzlesSlice";
@@ -22,6 +22,8 @@ import {
   toggleFilterTag,
   getTagFilter,
   getSolveStateFilter,
+  getInvertTagFilter,
+  setInvertTagFilter,
 } from "./filterSlice";
 import TagPill from "./TagPill";
 import { SolvedStateFilter } from "./solveStateFilter";
@@ -47,6 +49,7 @@ export const HuntViewMain = (props: { huntId: HuntId }) => {
   const hunt = useSelector<RootState, any>((state) => state.hunt);
   const alert = useSelector<RootState, any>((state) => state.alert);
   const filterTags = useSelector<RootState, PuzzleTag[]>(getTagFilter);
+  const invertTagFilter = useSelector<RootState, boolean>(getInvertTagFilter);
 
   const filterSolved = useSelector(getSolveStateFilter);
 
@@ -103,17 +106,27 @@ export const HuntViewMain = (props: { huntId: HuntId }) => {
           </div>
           <div>
             {filterTags.length > 0 ? "Viewing puzzles with tags: " : ""}
-            {filterTags.map(({ name, color, id }) => {
-              // This use of toggleFilterTag will remove the tag from the list
-              return (
-                <TagPill
-                  name={name}
-                  color={color}
-                  key={name}
-                  onClick={() => dispatch(toggleFilterTag({ name, color, id }))}
-                />
-              );
-            })}
+            {filterTags.map(({ name, color, id }) => (
+              <TagPill
+                name={name}
+                color={color}
+                key={name}
+                onClick={() => dispatch(toggleFilterTag({ name, color, id }))}
+              />
+            ))}
+
+            {filterTags.length > 0 && (
+              <Form.Check
+                style={{ display: "inline-block", marginLeft: "12px" }}
+                type="checkbox"
+                id="invert-tag-filter"
+                label="Inverse selection"
+                checked={invertTagFilter}
+                onChange={(e) =>
+                  dispatch(setInvertTagFilter(e.currentTarget.checked))
+                }
+              />
+            )}
           </div>
 
           <Button
@@ -137,6 +150,7 @@ export const HuntViewMain = (props: { huntId: HuntId }) => {
           data={tableData}
           filterSolved={filterSolved}
           filterTags={filterTags}
+          invertTagFilter={invertTagFilter}
         />
         <Modal
           animation={false}

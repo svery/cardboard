@@ -14,6 +14,7 @@ export const filterSlice = createSlice({
     textFilter: "",
     solveStateFilter: SOLVE_STATE_FILTER_OPTIONS.ALL,
     tags: [] as PuzzleTag[],
+    invertTagFilter: false,
   },
   reducers: {
     updateTextFilter: (state, action) => {
@@ -23,17 +24,23 @@ export const filterSlice = createSlice({
       state.solveStateFilter = action.payload;
     },
     toggleFilterTag: (state, action) => {
-      const newTag = action.payload;
+      const newTag: PuzzleTag = action.payload;
       if (state.tags.map((tag) => tag.name).includes(newTag.name)) {
         state.tags = state.tags.filter((tag) => tag.name !== newTag.name);
       } else {
         state.tags = state.tags.concat([newTag]);
       }
+      if (state.tags.length === 0) {
+        state.invertTagFilter = false;
+      }
+    },
+    setInvertTagFilter: (state, action) => {
+      state.invertTagFilter = !!action.payload;
     },
   },
 });
 
-export const { updateTextFilter, updateSolveStateFilter, toggleFilterTag } =
+export const { updateTextFilter, updateSolveStateFilter, toggleFilterTag, setInvertTagFilter } = 
   filterSlice.actions;
 export default filterSlice.reducer;
 export const getFilterOptions = (state: RootState) => state.filter;
@@ -51,3 +58,10 @@ export const getSolveStateFilter = createSelector(
 export const getTagFilter = createSelector([getFilterOptions], (filter) => {
   return filter.tags || [];
 });
+
+export const getInvertTagFilter = createSelector(
+  [getFilterOptions],
+  (filter) => {
+    return !!filter.invertTagFilter;
+  }
+);
