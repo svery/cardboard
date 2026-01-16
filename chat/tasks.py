@@ -218,7 +218,7 @@ def sync_roles(hunt_slug, service_name):
 
     for tag in cardboard_tags:
         if (
-            tag.color != PuzzleTagColor.BLUE and tag.color != PuzzleTagColor.WHITE
+            tag.color != PuzzleTagColor.BLUE
         ) or tag.name not in default_tag_names:
             continue
 
